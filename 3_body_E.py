@@ -4,7 +4,7 @@ from visual.graph import *
 spring_L=0.05
 ball_mass=1000
 vec_g=vector(0,-1, 0)*9.8
-vec_elec_field=vector(10000,0,0)
+vec_elec_field=vector(5000,0,0)
 K_spring=1000000000
 global_t=0
 dt=0.001
@@ -33,9 +33,9 @@ for index, ball in enumerate(balls):
 	ball.v=vector(0,0,0)
 	ball.a=vector(0,0,0)
 
-springs = [helix(radius=0.0001, thickness=0.001, color=color.red), \
-		   helix(radius=0.0001, thickness=0.001, color=color.red), \
-		   helix(radius=0.0001, thickness=0.001, color=color.red)]
+springs = [helix(radius=0.0001, thickness=0.001, color=color.red) for i in range(3)]
+
+arrows= [arrow(shaftwidth=0.01) for i in range(3)]
 
 def HookForce(vec_springTomass, length_spring, k):
     return -k*(vec_springTomass.mag - length_spring) * (vec_springTomass/vec_springTomass.mag)
@@ -48,8 +48,14 @@ def MassCenter(list_balls):
 	return sigma_pos/len(list_balls)
 
 while True:
-    #detect if anytime ball[0],ball[2]'s x=0 and ball[1]'s x>0
-
+	#set up arrows
+	for index, arrow in enumerate(arrows):
+		arrow.pos = balls[index].pos
+		#arrow showing acceleration of electric field
+		arrow.axis= vec_elec_field * balls[index].Q * (0.00001) #avoid exceed length of arrow
+	
+	#detect if anytime ball[0],ball[2]'s x=0 and ball[1]'s x>0
+	#vacant
 	#graphing mass center
 	sphere(radius=0.005, color=color.blue, pos=MassCenter(balls))
 
